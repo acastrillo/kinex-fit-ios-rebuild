@@ -8,20 +8,20 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // Tab 1: Home
-            HomeTabPlaceholder()
+            HomeView()
                 .tabItem {
                     Label("Home", systemImage: AppTheme.TabIcon.home)
                 }
                 .tag(Tab.home)
 
             // Tab 2: Library
-            LibraryTabPlaceholder()
+            LibraryView()
                 .tabItem {
                     Label("Library", systemImage: AppTheme.TabIcon.library)
                 }
                 .tag(Tab.library)
 
-            // Tab 3: Scan
+            // Tab 3: Scan (placeholder — Phase 5)
             ScanTabPlaceholder()
                 .tabItem {
                     Label("Scan", systemImage: AppTheme.TabIcon.scan)
@@ -29,13 +29,13 @@ struct MainTabView: View {
                 .tag(Tab.scan)
 
             // Tab 4: Metrics
-            MetricsTabPlaceholder()
+            MetricsView()
                 .tabItem {
                     Label("Metrics", systemImage: AppTheme.TabIcon.metrics)
                 }
                 .tag(Tab.metrics)
 
-            // Tab 5: Profile
+            // Tab 5: Profile (placeholder — Phase 8)
             ProfileTabPlaceholder()
                 .tabItem {
                     Label("Profile", systemImage: AppTheme.TabIcon.profile)
@@ -57,33 +57,7 @@ extension MainTabView {
     }
 }
 
-// MARK: - Placeholder Tabs (replaced in Phase 3+)
-
-private struct HomeTabPlaceholder: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Home",
-                systemImage: AppTheme.TabIcon.home,
-                description: Text("Dashboard coming soon")
-            )
-            .navigationTitle("Home")
-        }
-    }
-}
-
-private struct LibraryTabPlaceholder: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Library",
-                systemImage: AppTheme.TabIcon.library,
-                description: Text("Your workouts will appear here")
-            )
-            .navigationTitle("Library")
-        }
-    }
-}
+// MARK: - Placeholder Tabs (replaced in later phases)
 
 private struct ScanTabPlaceholder: View {
     var body: some View {
@@ -91,22 +65,9 @@ private struct ScanTabPlaceholder: View {
             ContentUnavailableView(
                 "Scan",
                 systemImage: AppTheme.Icon.ocrScan,
-                description: Text("OCR scanner coming soon")
+                description: Text("OCR scanner coming in Phase 5")
             )
             .navigationTitle("Scan")
-        }
-    }
-}
-
-private struct MetricsTabPlaceholder: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Metrics",
-                systemImage: AppTheme.TabIcon.metrics,
-                description: Text("Body metrics tracking coming soon")
-            )
-            .navigationTitle("Metrics")
         }
     }
 }

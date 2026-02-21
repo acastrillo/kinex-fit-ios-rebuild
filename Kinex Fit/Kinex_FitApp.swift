@@ -10,6 +10,7 @@ import SwiftUI
 @main
 struct Kinex_FitApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @Environment(\.scenePhase) private var scenePhase
     @State private var environment: AppEnvironment
 
     init() {
@@ -29,6 +30,12 @@ struct Kinex_FitApp: App {
             RootView()
                 .environment(\.appEnvironment, environment)
                 .preferredColorScheme(.dark)
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                // Process pending sync items when app comes to foreground
+                environment.syncEngine.processQueue()
+            }
         }
     }
 }

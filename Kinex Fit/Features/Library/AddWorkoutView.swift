@@ -18,7 +18,8 @@ struct AddWorkoutView: View {
             .onAppear {
                 if viewModel == nil {
                     viewModel = AddWorkoutViewModel(
-                        workoutRepository: environment.workoutRepository
+                        workoutRepository: environment.workoutRepository,
+                        syncEngine: environment.syncEngine
                     )
                 }
             }

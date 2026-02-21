@@ -8,14 +8,14 @@ struct LibraryView: View {
     var body: some View {
         Group {
             if let viewModel {
-                LibraryContent(viewModel: viewModel)
+                LibraryContent(viewModel: viewModel, syncEngine: environment.syncEngine)
             } else {
                 ProgressView()
             }
         }
         .onAppear {
             if viewModel == nil {
-                let vm = LibraryViewModel(workoutRepository: environment.workoutRepository)
+                let vm = LibraryViewModel(workoutRepository: environment.workoutRepository, syncEngine: environment.syncEngine)
                 vm.startObserving()
                 viewModel = vm
             }
@@ -27,6 +27,7 @@ struct LibraryView: View {
 
 private struct LibraryContent: View {
     @Bindable var viewModel: LibraryViewModel
+    let syncEngine: SyncEngine
 
     var body: some View {
         NavigationStack {
@@ -57,6 +58,7 @@ private struct LibraryContent: View {
                     }
                 }
             }
+            .syncStatusToolbar(syncEngine: syncEngine)
             .sheet(isPresented: $viewModel.showAddWorkout) {
                 AddWorkoutView()
             }

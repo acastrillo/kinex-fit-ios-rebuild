@@ -34,10 +34,12 @@ final class MetricsViewModel {
     // MARK: - Dependencies
 
     private let bodyMetricRepository: BodyMetricRepository
+    private let syncEngine: SyncEngine
     private var observation: AnyDatabaseCancellable?
 
-    init(bodyMetricRepository: BodyMetricRepository) {
+    init(bodyMetricRepository: BodyMetricRepository, syncEngine: SyncEngine) {
         self.bodyMetricRepository = bodyMetricRepository
+        self.syncEngine = syncEngine
     }
 
     // MARK: - Observation
@@ -60,7 +62,12 @@ final class MetricsViewModel {
     func deleteMetric(_ metric: BodyMetric) {
         do {
             try bodyMetricRepository.delete(id: metric.id)
-            // TODO: Phase 4 — enqueue sync deletion
+            syncEngine.enqueue(
+                operation: .delete,
+                entity: .bodyMetric,
+                entityId: metric.id,
+                payload: Data()
+            )
         } catch {
             self.error = "Failed to delete: \(error.localizedDescription)"
         }

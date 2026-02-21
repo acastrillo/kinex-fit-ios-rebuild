@@ -9,14 +9,14 @@ struct MetricsView: View {
     var body: some View {
         Group {
             if let viewModel {
-                MetricsContent(viewModel: viewModel)
+                MetricsContent(viewModel: viewModel, syncEngine: environment.syncEngine)
             } else {
                 ProgressView()
             }
         }
         .onAppear {
             if viewModel == nil {
-                let vm = MetricsViewModel(bodyMetricRepository: environment.bodyMetricRepository)
+                let vm = MetricsViewModel(bodyMetricRepository: environment.bodyMetricRepository, syncEngine: environment.syncEngine)
                 vm.startObserving()
                 viewModel = vm
             }
@@ -28,6 +28,7 @@ struct MetricsView: View {
 
 private struct MetricsContent: View {
     @Bindable var viewModel: MetricsViewModel
+    let syncEngine: SyncEngine
 
     var body: some View {
         NavigationStack {
@@ -52,6 +53,7 @@ private struct MetricsContent: View {
                     }
                 }
             }
+            .syncStatusToolbar(syncEngine: syncEngine)
             .sheet(isPresented: $viewModel.showAddMetric) {
                 AddMetricView()
             }

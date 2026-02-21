@@ -18,7 +18,8 @@ struct AddMetricView: View {
             .onAppear {
                 if viewModel == nil {
                     viewModel = AddMetricViewModel(
-                        bodyMetricRepository: environment.bodyMetricRepository
+                        bodyMetricRepository: environment.bodyMetricRepository,
+                        syncEngine: environment.syncEngine
                     )
                 }
             }

@@ -16,9 +16,11 @@ final class AddMetricViewModel {
     // MARK: - Dependencies
 
     private let bodyMetricRepository: BodyMetricRepository
+    private let syncEngine: SyncEngine
 
-    init(bodyMetricRepository: BodyMetricRepository) {
+    init(bodyMetricRepository: BodyMetricRepository, syncEngine: SyncEngine) {
         self.bodyMetricRepository = bodyMetricRepository
+        self.syncEngine = syncEngine
     }
 
     // MARK: - Computed
@@ -48,8 +50,13 @@ final class AddMetricViewModel {
 
         do {
             try bodyMetricRepository.save(metric)
+            syncEngine.enqueue(
+                operation: .create,
+                entity: .bodyMetric,
+                entityId: metric.id,
+                object: metric
+            )
             didSave = true
-            // TODO: Phase 4 — enqueue sync creation
         } catch {
             self.error = "Failed to save: \(error.localizedDescription)"
         }

@@ -16,6 +16,8 @@ final class AppEnvironment {
     // MARK: - Services
 
     let authService: AuthService
+    let syncEngine: SyncEngine
+    let networkMonitor: NetworkMonitor
 
     // MARK: - Repositories
 
@@ -46,9 +48,22 @@ final class AppEnvironment {
         self.workoutRepository = WorkoutRepository(database: database)
         self.bodyMetricRepository = BodyMetricRepository(database: database)
         self.syncQueueRepository = SyncQueueRepository(database: database)
+        self.syncEngine = SyncEngine(
+            apiClient: self.apiClient,
+            syncQueueRepository: self.syncQueueRepository
+        )
+        self.networkMonitor = NetworkMonitor()
 
         // Load persisted user on init
         self.currentUser = try? userRepository.getCurrentUser()
+
+        // Start network monitoring — trigger sync on reconnect
+        networkMonitor.onReconnect = { [weak self] in
+            Task { @MainActor in
+                self?.syncEngine.processQueue()
+            }
+        }
+        networkMonitor.start()
     }
 
     // MARK: - Factories

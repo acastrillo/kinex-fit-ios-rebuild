@@ -15,9 +15,11 @@ final class AddWorkoutViewModel {
     // MARK: - Dependencies
 
     private let workoutRepository: WorkoutRepository
+    private let syncEngine: SyncEngine
 
-    init(workoutRepository: WorkoutRepository) {
+    init(workoutRepository: WorkoutRepository, syncEngine: SyncEngine) {
         self.workoutRepository = workoutRepository
+        self.syncEngine = syncEngine
     }
 
     // MARK: - Computed
@@ -40,8 +42,13 @@ final class AddWorkoutViewModel {
 
         do {
             try workoutRepository.save(workout)
+            syncEngine.enqueue(
+                operation: .create,
+                entity: .workout,
+                entityId: workout.id,
+                object: workout
+            )
             didSave = true
-            // TODO: Phase 4 — enqueue sync creation
         } catch {
             self.error = "Failed to save workout: \(error.localizedDescription)"
         }

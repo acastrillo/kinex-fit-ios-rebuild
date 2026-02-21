@@ -20,10 +20,12 @@ final class LibraryViewModel {
     // MARK: - Dependencies
 
     private let workoutRepository: WorkoutRepository
+    private let syncEngine: SyncEngine
     private var observation: AnyDatabaseCancellable?
 
-    init(workoutRepository: WorkoutRepository) {
+    init(workoutRepository: WorkoutRepository, syncEngine: SyncEngine) {
         self.workoutRepository = workoutRepository
+        self.syncEngine = syncEngine
     }
 
     // MARK: - Observation
@@ -56,7 +58,12 @@ final class LibraryViewModel {
     func deleteWorkout(_ workout: Workout) {
         do {
             try workoutRepository.delete(id: workout.id)
-            // TODO: Phase 4 — enqueue sync deletion
+            syncEngine.enqueue(
+                operation: .delete,
+                entity: .workout,
+                entityId: workout.id,
+                payload: Data()
+            )
         } catch {
             self.error = "Failed to delete workout: \(error.localizedDescription)"
         }
@@ -69,8 +76,7 @@ final class LibraryViewModel {
 
     func refresh() async {
         isLoading = true
-        // TODO: Phase 4 — trigger sync engine pull + push
-        // For now, just reload from local DB
+        syncEngine.processQueue()
         do {
             workouts = try workoutRepository.fetchAll()
         } catch {

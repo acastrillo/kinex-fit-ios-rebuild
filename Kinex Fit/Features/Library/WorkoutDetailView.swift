@@ -20,7 +20,8 @@ struct WorkoutDetailView: View {
             if viewModel == nil {
                 viewModel = WorkoutDetailViewModel(
                     workout: workout,
-                    workoutRepository: environment.workoutRepository
+                    workoutRepository: environment.workoutRepository,
+                    syncEngine: environment.syncEngine
                 )
             }
         }

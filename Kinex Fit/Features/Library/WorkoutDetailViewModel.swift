@@ -17,10 +17,12 @@ final class WorkoutDetailViewModel {
     // MARK: - Dependencies
 
     private let workoutRepository: WorkoutRepository
+    private let syncEngine: SyncEngine
 
-    init(workout: Workout, workoutRepository: WorkoutRepository) {
+    init(workout: Workout, workoutRepository: WorkoutRepository, syncEngine: SyncEngine) {
         self.workout = workout
         self.workoutRepository = workoutRepository
+        self.syncEngine = syncEngine
         self.editTitle = workout.title
         self.editContent = workout.content ?? ""
     }
@@ -49,8 +51,13 @@ final class WorkoutDetailViewModel {
 
         do {
             try workoutRepository.save(workout)
+            syncEngine.enqueue(
+                operation: .update,
+                entity: .workout,
+                entityId: workout.id,
+                object: workout
+            )
             isEditing = false
-            // TODO: Phase 4 — enqueue sync update
         } catch {
             self.error = "Failed to save: \(error.localizedDescription)"
         }
@@ -59,8 +66,13 @@ final class WorkoutDetailViewModel {
     func deleteWorkout() {
         do {
             try workoutRepository.delete(id: workout.id)
+            syncEngine.enqueue(
+                operation: .delete,
+                entity: .workout,
+                entityId: workout.id,
+                payload: Data()
+            )
             didDelete = true
-            // TODO: Phase 4 — enqueue sync deletion
         } catch {
             self.error = "Failed to delete: \(error.localizedDescription)"
         }

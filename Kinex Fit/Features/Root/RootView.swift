@@ -50,8 +50,7 @@ private struct RootContent: View {
                     .transition(.opacity)
 
             case .onboarding:
-                // Placeholder — will be replaced in Phase 8
-                OnboardingPlaceholder {
+                OnboardingView {
                     viewModel.completeOnboarding()
                 }
                 .transition(.opacity)
@@ -79,47 +78,6 @@ private struct RootContent: View {
                     .foregroundStyle(.accent)
                 ProgressView()
             }
-        }
-    }
-}
-
-// MARK: - Onboarding Placeholder
-
-/// Temporary placeholder for onboarding. Will be replaced in Phase 8.
-private struct OnboardingPlaceholder: View {
-    let onComplete: () -> Void
-
-    var body: some View {
-        VStack(spacing: AppTheme.spacingXL) {
-            Spacer()
-
-            Image(systemName: AppTheme.Icon.workout)
-                .font(.system(size: 72))
-                .foregroundStyle(.accent)
-
-            Text("Welcome to Kinex Fit!")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-
-            Text("Your workout companion for tracking, scanning, and improving your fitness journey.")
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, AppTheme.spacingXXL)
-
-            Spacer()
-
-            Button {
-                onComplete()
-            } label: {
-                Text("Get Started")
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 50)
-            }
-            .buttonStyle(.borderedProminent)
-            .padding(.horizontal, AppTheme.spacingXL)
-            .padding(.bottom, AppTheme.spacingXXL)
         }
     }
 }

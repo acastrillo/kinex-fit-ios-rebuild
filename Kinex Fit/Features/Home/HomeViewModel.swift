@@ -14,6 +14,7 @@ final class HomeViewModel {
     var subscriptionTier: SubscriptionTier = .free
     var remainingScans: Int = 0
     var remainingAI: Int = 0
+    var pendingInstagramImports: Int = 0
 
     // MARK: - Dependencies
 
@@ -52,6 +53,7 @@ final class HomeViewModel {
         }
 
         refreshUserInfo()
+        checkPendingImports()
     }
 
     /// Refreshes user-related dashboard data.
@@ -61,6 +63,12 @@ final class HomeViewModel {
         subscriptionTier = user.subscriptionTier
         remainingScans = user.remainingScans
         remainingAI = user.remainingAIOperations
+    }
+
+    /// Checks for pending Instagram imports in the App Group shared container.
+    func checkPendingImports() {
+        let storage = AppGroupStorage()
+        pendingInstagramImports = storage.pendingImports().count
     }
 
     // MARK: - Computed

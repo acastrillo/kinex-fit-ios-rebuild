@@ -31,11 +31,21 @@ struct HomeView: View {
 
 private struct HomeContent: View {
     @Bindable var viewModel: HomeViewModel
+    @State private var showInstagramImport = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.spacingXL) {
+                    // Instagram import banner
+                    if viewModel.pendingInstagramImports > 0 {
+                        InstagramImportBannerView(
+                            count: viewModel.pendingInstagramImports
+                        ) {
+                            showInstagramImport = true
+                        }
+                    }
+
                     // Greeting
                     greetingSection
 
@@ -51,6 +61,9 @@ private struct HomeContent: View {
                 .padding(AppTheme.spacingLG)
             }
             .navigationTitle("Home")
+            .sheet(isPresented: $showInstagramImport) {
+                InstagramImportReviewView()
+            }
         }
     }
 

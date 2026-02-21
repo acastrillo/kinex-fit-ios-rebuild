@@ -18,6 +18,7 @@ final class AppEnvironment {
     let authService: AuthService
     let syncEngine: SyncEngine
     let networkMonitor: NetworkMonitor
+    let deepLinkHandler: DeepLinkHandler
 
     // MARK: - Repositories
 
@@ -53,6 +54,7 @@ final class AppEnvironment {
             syncQueueRepository: self.syncQueueRepository
         )
         self.networkMonitor = NetworkMonitor()
+        self.deepLinkHandler = DeepLinkHandler()
 
         // Load persisted user on init
         self.currentUser = try? userRepository.getCurrentUser()

@@ -21,8 +21,8 @@ struct MainTabView: View {
                 }
                 .tag(Tab.library)
 
-            // Tab 3: Scan (placeholder — Phase 5)
-            ScanTabPlaceholder()
+            // Tab 3: Scan
+            ScannerView()
                 .tabItem {
                     Label("Scan", systemImage: AppTheme.TabIcon.scan)
                 }
@@ -35,8 +35,8 @@ struct MainTabView: View {
                 }
                 .tag(Tab.metrics)
 
-            // Tab 5: Profile (placeholder — Phase 8)
-            ProfileTabPlaceholder()
+            // Tab 5: Profile
+            ProfileView()
                 .tabItem {
                     Label("Profile", systemImage: AppTheme.TabIcon.profile)
                 }
@@ -54,64 +54,6 @@ extension MainTabView {
         case scan
         case metrics
         case profile
-    }
-}
-
-// MARK: - Placeholder Tabs (replaced in later phases)
-
-private struct ScanTabPlaceholder: View {
-    var body: some View {
-        NavigationStack {
-            ContentUnavailableView(
-                "Scan",
-                systemImage: AppTheme.Icon.ocrScan,
-                description: Text("OCR scanner coming in Phase 5")
-            )
-            .navigationTitle("Scan")
-        }
-    }
-}
-
-private struct ProfileTabPlaceholder: View {
-    @Environment(\.appEnvironment) private var environment
-
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: AppTheme.spacingLG) {
-                if let user = environment.currentUser {
-                    VStack(spacing: AppTheme.spacingSM) {
-                        Image(systemName: AppTheme.TabIcon.profile)
-                            .font(.system(size: 56))
-                            .foregroundStyle(.accent)
-
-                        Text(user.name)
-                            .font(.title2)
-                            .fontWeight(.bold)
-
-                        Text(user.email)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-
-                        Text(user.subscriptionTier.displayName)
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .padding(.horizontal, AppTheme.spacingMD)
-                            .padding(.vertical, AppTheme.spacingXS)
-                            .background(.accent.opacity(0.2))
-                            .cornerRadius(AppTheme.cornerRadiusSM)
-                    }
-                    .padding(.top, AppTheme.spacingXXL)
-                }
-
-                Spacer()
-
-                Text(AppConfig.versionDisplay)
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
-                    .padding(.bottom, AppTheme.spacingLG)
-            }
-            .navigationTitle("Profile")
-        }
     }
 }
 

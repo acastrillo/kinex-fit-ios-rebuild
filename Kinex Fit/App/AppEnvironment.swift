@@ -13,6 +13,10 @@ final class AppEnvironment {
     let apiClient: APIClient
     let tokenStore: TokenStore
 
+    // MARK: - Services
+
+    let authService: AuthService
+
     // MARK: - Repositories
 
     let userRepository: UserRepository
@@ -37,6 +41,7 @@ final class AppEnvironment {
             tokenStore: tokenStore,
             baseURL: AppConfig.apiBaseURL
         )
+        self.authService = AuthService(apiClient: self.apiClient)
         self.userRepository = UserRepository(database: database)
         self.workoutRepository = WorkoutRepository(database: database)
         self.bodyMetricRepository = BodyMetricRepository(database: database)

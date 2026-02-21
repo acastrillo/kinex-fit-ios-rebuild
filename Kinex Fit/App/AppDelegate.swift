@@ -26,6 +26,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     private func handleDeepLink(_ url: URL) -> Bool {
+        // Try Google/Facebook OAuth callbacks first
+        // TODO: Uncomment when SDKs are added
+        // if GIDSignIn.sharedInstance.handle(url) { return true }
+        // if ApplicationDelegate.shared.application(UIApplication.shared, open: url, options: [:]) { return true }
+
+        // Handle app-specific deep links (kinexfit:// scheme)
         guard url.scheme == AppConfig.urlScheme else { return false }
 
         // Post notification so any interested view model can handle it

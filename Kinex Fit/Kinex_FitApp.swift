@@ -26,7 +26,7 @@ struct Kinex_FitApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            RootView()
                 .environment(\.appEnvironment, environment)
                 .preferredColorScheme(.dark)
         }
